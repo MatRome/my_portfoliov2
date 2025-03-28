@@ -1,0 +1,1211 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Portfolio - Mateusz Romek, Data Analyst & Web Developer.">
+  <meta name="keywords" content="Data Analyst, Web Developer, Portfolio, Data Science, Machine Learning, Visualization">
+  <title>Portfolio - Mateusz Romek</title>
+  
+  <!-- JetBrains Mono Font -->
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;500;700;900&display=swap" rel="stylesheet">
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    /* CSS Variables dla spójnego motywu */
+    :root {
+      --primary: #00ff9d;
+      --secondary: #00d685;
+      --bg: #000;
+      --text: #e0e0e0;
+      --overlay: rgba(0,0,0,0.85);
+      --gradient: linear-gradient(135deg, rgba(0,255,157,0.2), rgba(0,208,255,0.2), rgba(255,0,255,0.2));
+      --transition: 0.3s ease;
+    }
+    
+    /*
+      TRYB JASNY
+      Zmienione kolory i gradient, by tło nie było czystą bielą, a subtelnym jasnym motywem.
+      Dodatkowo rozjaśnione elementy i karty projektów, aby były bardziej przyjazne dla oka.
+    */
+    body.light-theme {
+      --bg: #f3f4f6; /* Subtelne, jasnoszare tło zamiast czystej bieli */
+      --text: #222;
+      --primary: #00966c; 
+      --secondary: #2cb38a;
+      --overlay: rgba(255,255,255,0.6); 
+      --gradient: linear-gradient(135deg, rgba(0,150,108,0.1), rgba(44,179,138,0.1), rgba(255,0,255,0.1));
+    }
+    
+    /* RESET CSS */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+    }
+    body {
+      font-family: 'JetBrains Mono', monospace;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      position: relative;
+      line-height: 1.6;
+    }
+    
+    /* Tło: cząsteczki, gradient i ciemna warstwa */
+    #particle-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -4;
+      background: var(--bg);
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--gradient);
+      background-size: 400% 400%;
+      animation: gradientShift 30s ease infinite;
+      z-index: -3;
+    }
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    body::after {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--overlay);
+      z-index: -2;
+    }
+    
+    /* Niestandardowy kursor */
+    body, a, button {
+      cursor: url('https://cdn-icons-png.flaticon.com/512/5087/5087579.png'), auto;
+    }
+    
+    /* Nawigacja */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 70px;
+      background: rgba(0, 0, 0, 0.8);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 20px;
+      z-index: 1000;
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--primary);
+    }
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: var(--primary);
+      letter-spacing: 2px;
+    }
+    /* Kontener dla przycisków w nagłówku */
+    .header-buttons {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    /* Przycisk przełącznika trybu */
+    #theme-toggle {
+      background: none;
+      border: none;
+      color: var(--text);
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: color var(--transition);
+    }
+    #theme-toggle:hover {
+      color: var(--primary);
+    }
+    
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 30px;
+    }
+    nav a {
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 500;
+      font-size: 1rem;
+      position: relative;
+      transition: color var(--transition);
+    }
+    nav a:hover {
+      color: var(--primary);
+    }
+    nav a::after {
+      content: "";
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: var(--primary);
+      transform: scaleX(0);
+      transform-origin: right;
+      transition: transform var(--transition);
+    }
+    nav a:hover::after {
+      transform: scaleX(1);
+      transform-origin: left;
+    }
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+    }
+    .hamburger span {
+      width: 25px;
+      height: 3px;
+      background: var(--text);
+      transition: background var(--transition);
+    }
+    @media (max-width: 768px) {
+      nav ul {
+        position: absolute;
+        top: 70px;
+        right: 0;
+        background: rgba(0,0,0,0.95);
+        width: 220px;
+        flex-direction: column;
+        transform: translateX(100%);
+        transition: transform var(--transition);
+      }
+      nav ul.show {
+        transform: translateX(0);
+      }
+      nav li {
+        padding: 15px 20px;
+        border-bottom: 1px solid #333;
+      }
+      .hamburger {
+        display: flex;
+      }
+    }
+    
+    /* Sekcja Hero z wideo w tle i preloaderem */
+    .hero {
+      width: 100%;
+      height: 100vh;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      z-index: 1;
+    }
+    .hero video {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      min-width: 100%;
+      min-height: 100%;
+      width: auto;
+      height: auto;
+      transform: translate(-50%, -50%);
+      z-index: -5;
+      filter: brightness(0.4);
+      object-fit: cover;
+    }
+    .hero-content {
+      max-width: 1000px;
+      margin-top: 70px;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 1s forwards 0.5s;
+    }
+    @keyframes fadeInUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .hero h1 {
+      font-size: 3.5rem;
+      margin-bottom: 20px;
+      font-weight: 900;
+      line-height: 1.2;
+      text-shadow: 2px 2px 4px rgba(0,255,157,0.5);
+    }
+    .hero h1 span {
+      color: var(--primary);
+    }
+    .hero h2 {
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+      color: #aaa;
+      font-weight: 300;
+    }
+    .typed-text {
+      display: inline-block;
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+      overflow: hidden;
+      white-space: nowrap;
+      border-right: 3px solid var(--primary); 
+      animation: blink-caret 0.75s step-end infinite;
+    }
+    @keyframes blink-caret {
+      50% { border-color: transparent; }
+    }
+    .profile-picture {
+      width: 220px;
+      height: 220px;
+      margin: 30px auto;
+      position: relative;
+      border-radius: 50%;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 20px rgba(0,255,157,0.8);
+      transition: transform 0.5s ease;
+    }
+    .profile-picture::before {
+      content: '';
+      position: absolute;
+      top: -5px;
+      left: -5px;
+      right: -5px;
+      bottom: -5px;
+      background: linear-gradient(45deg, var(--primary), var(--secondary), var(--primary), var(--secondary));
+      background-size: 400%;
+      z-index: -1;
+      filter: blur(8px);
+      animation: neonBorder 3s linear infinite;
+    }
+    @keyframes neonBorder {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .profile-picture::after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: radial-gradient(circle, transparent 60%, var(--primary) 100%);
+      opacity: 0;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0% { opacity: 0; transform: scale(0.8); }
+      50% { opacity: 1; transform: scale(1.05); }
+      100% { opacity: 0; transform: scale(0.8); }
+    }
+    .profile-picture img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+      transition: transform 0.5s ease, filter 0.5s ease;
+    }
+    .profile-picture:hover {
+      transform: scale(1.05);
+    }
+    .profile-picture:hover img {
+      transform: scale(1.1);
+      filter: brightness(1.3);
+    }
+    .hero button {
+      background: var(--primary);
+      color: var(--bg);
+      border: none;
+      padding: 15px 30px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background var(--transition), transform var(--transition);
+      font-weight: 600;
+      border-radius: 5px;
+      margin-top: 20px;
+    }
+    .hero button:hover {
+      background: var(--secondary);
+      transform: scale(1.05);
+    }
+    .scroll-down {
+      position: absolute;
+      bottom: 20px;
+      font-size: 2rem;
+      color: var(--primary);
+      cursor: pointer;
+      animation: bounce 2s infinite;
+    }
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+      40% { transform: translateY(-10px); }
+      60% { transform: translateY(-5px); }
+    }
+    
+    /* Sekcje wspólne */
+    section {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 80px 20px;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 1s forwards;
+    }
+    .section-title {
+      font-size: 2.8rem;
+      color: var(--primary);
+      margin-bottom: 40px;
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-weight: 900;
+    }
+    .about-content {
+      text-align: center;
+      max-width: 800px;
+      margin: 0 auto;
+      font-size: 1.1rem;
+      line-height: 1.8;
+      color: #ccc;
+    }
+    
+    /* Umiejętności */
+    .skills {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+      margin-top: 40px;
+      flex-wrap: wrap;
+    }
+    .skill-icon {
+      width: 60px;
+      height: 60px;
+      border: 2px solid var(--primary);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 5px;
+      transition: transform var(--transition), box-shadow var(--transition);
+    }
+    .skill-icon:hover {
+      transform: scale(1.2);
+      box-shadow: 0 0 15px var(--primary);
+    }
+    .skill-icon img {
+      max-width: 70%;
+      max-height: 70%;
+      object-fit: contain;
+    }
+    
+    /* Sekcja parallax dla projektów */
+    .parallax-section {
+      background-size: cover;
+      background-attachment: fixed;
+      background-position: center;
+      background-repeat: no-repeat;
+      height: 50vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .parallax-section h2 {
+      font-size: 3rem;
+      background: rgba(0,0,0,0.6);
+      padding: 20px;
+      border-radius: 10px;
+      font-weight: 900;
+      color: var(--primary);
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+    }
+    
+    /* Projekty */
+    .projects-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin-top: 40px;
+    }
+    .project-card {
+      background: rgba(0, 0, 0, 0.8);
+      border: 1px solid #333;
+      border-radius: 8px;
+      padding: 20px;
+      transition: transform var(--transition), box-shadow var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+    /* W jasnym trybie karty projektów też będą jaśniejsze i delikatnie prześwitujące */
+    body.light-theme .project-card {
+      background: rgba(255, 255, 255, 0.85);
+      border: 1px solid rgba(0, 0, 0, 0.15);
+      color: #333;
+    }
+    .project-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to right, transparent, var(--primary), transparent);
+      transition: left 0.5s;
+    }
+    .project-card:hover::before {
+      left: 100%;
+    }
+    .project-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 0 20px var(--primary);
+    }
+    .project-image {
+      overflow: hidden;
+      border-radius: 5px;
+      margin-bottom: 15px;
+    }
+    .project-image img {
+      width: 100%;
+      display: block;
+      transition: transform 0.5s ease;
+    }
+    .project-card:hover .project-image img {
+      transform: translateY(-5px);
+    }
+    .project-title {
+      color: var(--primary);
+      font-size: 1.4rem;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+    .project-tags {
+      margin-bottom: 10px;
+      color: var(--primary);
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    .project-description {
+      color: #bbb;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    body.light-theme .project-description {
+      color: #444; /* W jasnym trybie tekst karty ciemniejszy */
+    }
+    body.light-theme .about-content {
+      color: #222; /* lub #000, jeśli chcesz pełną czerń */
+    }    
+    /* Ikona w przycisku przełączania motywu */
+    body.light-theme #theme-toggle i {
+      color: #fff !important;
+    }
+    /* Linki w nawigacji */
+    body.light-theme nav a {
+      color: #fff !important;
+    }
+
+/* Jeśli masz hamburger menu, jego paski też warto zmienić na białe */
+body.light-theme .hamburger span {
+  background: #fff !important;
+}
+
+    
+    .btn-quick-view {
+      background: none;
+      color: var(--primary);
+      border: 1px solid var(--primary);
+      padding: 8px 16px;
+      cursor: pointer;
+      transition: background var(--transition), color var(--transition);
+      text-transform: uppercase;
+      font-weight: 600;
+      text-decoration: none;
+      width: fit-content;
+    }
+    .btn-quick-view:hover {
+      background: var(--primary);
+      color: var(--bg);
+    }
+    
+    /* Nowoczesny system oceniania – gwiazdki */
+    .rating {
+      margin-top: 0;
+      margin-bottom: 20px;
+      display: inline-block;
+      position: relative;
+    }
+    .rating i {
+      font-size: 1.5rem;
+      color: #444;
+      cursor: pointer;
+      transition: color var(--transition);
+      margin-right: 2px;
+    }
+    .rating i.selected,
+    .rating i.hover {
+      color: var(--primary);
+    }
+    
+    /* Sekcja Contact */
+    #contact .contact-icons {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin-top: 20px;
+    }
+    #contact .contact-icons a {
+      font-size: 2.5rem;
+      color: var(--text);
+      transition: color var(--transition);
+    }
+    #contact .contact-icons a:hover {
+      color: var(--primary);
+    }
+    
+    /* Stopka */
+    footer {
+      text-align: center;
+      padding: 30px 20px;
+      color: #999;
+      background: rgba(0, 0, 0, 0.9);
+      font-size: 0.9rem;
+      margin-top: 80px;
+      border-top: 1px solid var(--primary);
+    }
+    footer span {
+      color: var(--primary);
+    }
+    
+    /* Przycisk Back to Top */
+    #back-to-top {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: var(--primary);
+      color: var(--bg);
+      border: none;
+      padding: 10px 15px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 1.2rem;
+      display: none;
+      z-index: 1000;
+      transition: transform var(--transition);
+    }
+    #back-to-top:hover {
+      transform: scale(1.1);
+    }
+    
+    /* Pasek postępu przewijania */
+    #progress-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: rgba(0, 0, 0, 0.2);
+      z-index: 999;
+    }
+    #progress-bar {
+      width: 0;
+      height: 100%;
+      background: var(--primary);
+    }
+    
+    /* Preloader */
+    #preloader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 3000;
+    }
+
+    /* Klasa .show-element nadawana przez Intersection Observer (animacja w CSS) */
+    .show-element {
+      opacity: 1 !important;
+      transform: translateY(0) !important;
+      transition: all 0.6s ease;
+    }
+  </style>
+</head>
+<body>
+  <!-- Particle Canvas -->
+  <canvas id="particle-canvas"></canvas>
+  
+  <!-- Pasek postępu przewijania -->
+  <div id="progress-container">
+    <div id="progress-bar"></div>
+  </div>
+  
+  <!-- Nawigacja -->
+  <header>
+    <div class="logo">Portfolio</div>
+    <div class="header-buttons">
+      <button id="theme-toggle" title="Toggle Theme"><i class="fas fa-sun"></i></button>
+    </div>
+    <nav>
+      <div class="hamburger" id="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <ul id="nav-list">
+        <li><a href="#hero">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+  
+  <!-- Sekcja Hero -->
+  <section class="hero" id="hero">
+    <video autoplay loop muted playsinline>
+      <source src="https://www.videvo.net/videvo_files/converted/2014_05/preview/Space_Loop_3.mp461271.webm" type="video/webm">
+      <source src="https://www.videvo.net/videvo_files/converted/2014_05/preview/Space_Loop_3.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+    <div class="hero-content">
+      <h1>Hello, I'm <span>Mateusz Romek</span></h1>
+      <h2>Data Analyst</h2>
+      <div class="typed-text" id="typed"></div>
+      <div class="profile-picture">
+        <img src="images/foto.png" alt="Profile Picture">
+      </div>
+      <button onclick="window.location.href='resume.pdf'">
+        <i class="fas fa-download" style="margin-right: 8px;"></i>Download Resume
+      </button>
+    </div>
+    <div class="scroll-down" onclick="scrollToSection('about')">
+      <i class="fas fa-angle-down"></i>
+    </div>
+  </section>
+  
+  <!-- Sekcja About -->
+  <section id="about">
+    <h2 class="section-title">About Me</h2>
+    <div class="about-content">
+      <p>
+        I am a Computer Science and Econometrics student at AGH University since 2023, passionate about Data Science, Machine Learning, and Statistical Analysis.
+        <br/><br/>
+        I have strong skills in data visualization, financial analysis, and I am learning about predictive modeling. I am actively seeking collaborations and exciting new projects in data science and software development.
+        <br/><br/>
+        My skills: Excel – SQL – Python – R – Power BI.
+      </p>
+      <div class="skills">
+        <div class="skill-icon">
+          <img src="images/excel.png" alt="Excel">
+        </div>
+        <div class="skill-icon">
+          <img src="images/sql.png" alt="SQL">
+        </div>
+        <div class="skill-icon">
+          <img src="images/python.png" alt="Python">
+        </div>
+        <div class="skill-icon">
+          <img src="images/r.png" alt="R">
+        </div>
+        <div class="skill-icon">
+          <img src="images/powerbi.png" alt="Power BI">
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Sekcja parallax dla projektów -->
+  <div class="parallax-section" style="background-image: url('https://wallscloud.net/img/resize/3440/1440/MM/2022-09-04-web-code-1-53288.jpeg');">
+    <h2>Projects</h2>
+  </div>
+  
+  <!-- Sekcja Projects -->
+  <section id="projects">
+    <div class="projects-container">
+      <!-- Projekt 1 -->
+      <div class="project-card">
+        <div class="project-image">
+          <img src="images/churn.png" alt="Churn Analysis Dashboard">
+        </div>
+        <h3 class="project-title">Churn Analysis Dashboard</h3>
+        <div class="project-tags">Power BI | Python | SQL</div>
+        <p class="project-description">
+          Analysis and prediction of customer churn based on SQL database insights. Interactive visualizations highlight key metrics.
+        </p>
+        <!-- System oceniania -->
+        <div class="rating">
+          <i class="fas fa-star" data-value="1"></i>
+          <i class="fas fa-star" data-value="2"></i>
+          <i class="fas fa-star" data-value="3"></i>
+          <i class="fas fa-star" data-value="4"></i>
+          <i class="fas fa-star" data-value="5"></i>
+        </div>
+        <!-- Quick View -> bez modala, od razu link -->
+        <a href="https://onedrive.live.com/?cid=376641BF80CB08BB&id=376641BF80CB08BB%21s0a6ed87b4a814afa81f357d5f7c37786&parId=root&o=OneUp"
+           class="btn-quick-view" target="_blank">
+          Quick View
+        </a>
+      </div>
+      
+      <!-- Projekt 2 -->
+      <div class="project-card">
+        <div class="project-image">
+          <img src="images/project2.png" alt="Sales Performance Dashboard">
+        </div>
+        <h3 class="project-title">Sales Performance Dashboard</h3>
+        <div class="project-tags">Excel | BI</div>
+        <p class="project-description">
+          A comprehensive dashboard analyzing sales and revenue using advanced Excel functions and pivot tables.
+        </p>
+        <div class="rating">
+          <i class="fas fa-star" data-value="1"></i>
+          <i class="fas fa-star" data-value="2"></i>
+          <i class="fas fa-star" data-value="3"></i>
+          <i class="fas fa-star" data-value="4"></i>
+          <i class="fas fa-star" data-value="5"></i>
+        </div>
+        <a href="https://onedrive.live.com/edit?id=376641BF80CB08BB!s12296efc984a453f8c5f294ab8011434"
+           class="btn-quick-view" target="_blank">
+          Quick View
+        </a>
+      </div>
+      
+      <!-- Projekt 3 -->
+      <div class="project-card">
+        <div class="project-image">
+          <img src="images/project3.png" alt="EDA – Heart Disease Analysis">
+        </div>
+        <h3 class="project-title">EDA – Heart Disease Analysis</h3>
+        <div class="project-tags">R | Statistics</div>
+        <p class="project-description">
+          Exploratory analysis of heart disease data. Data cleaning, visualization, and statistical analysis.
+        </p>
+        <div class="rating">
+          <i class="fas fa-star" data-value="1"></i>
+          <i class="fas fa-star" data-value="2"></i>
+          <i class="fas fa-star" data-value="3"></i>
+          <i class="fas fa-star" data-value="4"></i>
+          <i class="fas fa-star" data-value="5"></i>
+        </div>
+        <a href="https://matrome.github.io/heart-disease-analysis/"
+           class="btn-quick-view" target="_blank">
+          Quick View
+        </a>
+      </div>
+      
+      <!-- Projekt 4 -->
+      <div class="project-card">
+        <div class="project-image">
+          <img src="images/project4.png" alt="Financial Analysis">
+        </div>
+        <h3 class="project-title">Financial Analysis</h3>
+        <div class="project-tags">Excel</div>
+        <p class="project-description">
+          Sales and revenue analysis using pivot tables and advanced Excel functions. Dashboards display key metrics, customer analysis, location insights, and trends.
+        </p>
+        <div class="rating">
+          <i class="fas fa-star" data-value="1"></i>
+          <i class="fas fa-star" data-value="2"></i>
+          <i class="fas fa-star" data-value="3"></i>
+          <i class="fas fa-star" data-value="4"></i>
+          <i class="fas fa-star" data-value="5"></i>
+        </div>
+        <a href="https://onedrive.live.com/:x:/g/personal/376641BF80CB08BB/ETAcaPel_PNJnEj0hk6qIWoBvjzd7QeiBLj6na6BmbKJww"
+           class="btn-quick-view" target="_blank">
+          Quick View
+        </a>
+      </div>
+      
+      <!-- Projekt 5 -->
+      <div class="project-card">
+        <div class="project-image">
+          <img src="images/project5.png" alt="Breast Cancer Diagnostic Analysis">
+        </div>
+        <h3 class="project-title">Breast Cancer Diagnostic Analysis</h3>
+        <div class="project-tags">R | Shiny</div>
+        <p class="project-description">
+          EDA, feature visualization, and variable importance analysis for cancer classification using logistic regression and threshold optimization.
+        </p>
+        <div class="rating">
+          <i class="fas fa-star" data-value="1"></i>
+          <i class="fas fa-star" data-value="2"></i>
+          <i class="fas fa-star" data-value="3"></i>
+          <i class="fas fa-star" data-value="4"></i>
+          <i class="fas fa-star" data-value="5"></i>
+        </div>
+        <a href="https://matrome.shinyapps.io/rak_piersi/"
+           class="btn-quick-view" target="_blank">
+          Quick View
+        </a>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Sekcja Contact -->
+  <section id="contact">
+    <h2 class="section-title">Contact</h2>
+    <div class="contact-icons">
+      <a href="mailto:mtromek@gmail.com" target="_blank" title="Email Me">
+        <i class="fas fa-envelope"></i>
+      </a>
+      <a href="https://github.com/MatRome" target="_blank" title="My GitHub">
+        <i class="fab fa-github"></i>
+      </a>
+      <a href="https://www.linkedin.com/in/mateusz-romek-386043321/" target="_blank" title="My LinkedIn">
+        <i class="fab fa-linkedin"></i>
+      </a>
+    </div>
+  </section>
+  
+  <!-- Stopka -->
+  <footer>
+    © <span>2025</span> Mateusz Romek. All rights reserved.
+  </footer>
+  
+  <!-- Przycisk Back to Top -->
+  <button id="back-to-top" title="Back to Top">
+    <i class="fas fa-angle-up"></i>
+  </button>
+  
+  <!-- Audio dla efektu dźwiękowego przy najechaniu -->
+  <audio id="hoverSound" src="sounds/hover.mp3" preload="auto"></audio>
+  <!-- Audio dla efektu fajerwerków -->
+  <audio id="fireworkSound" src="sounds/firework.mp3" preload="auto"></audio>
+  
+  <!-- Preloader -->
+  <div id="preloader">
+    <div style="font-size:1.5rem; color:var(--primary);">Loading...</div>
+  </div>
+  
+  <!-- Skrypty -->
+  <script>
+    /* Preloader */
+    window.addEventListener('load', () => {
+      document.getElementById('preloader').style.display = 'none';
+    });
+  
+    /* Toggle dla menu hamburgera */
+    const hamburger = document.getElementById('hamburger');
+    const navList = document.getElementById('nav-list');
+    hamburger.addEventListener('click', () => {
+      navList.classList.toggle('show');
+    });
+    
+    /* Przełącznik trybu ciemnego/jasnego */
+    const themeToggle = document.getElementById('theme-toggle');
+    themeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('light-theme');
+      if(document.body.classList.contains('light-theme')) {
+         themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+      } else {
+         themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+      }
+    });
+    
+    /* Intersection Observer dla animacji sekcji */
+    const animatedElements = document.querySelectorAll('section, .hero-content');
+    const observerOptions = { threshold: 0.2 };
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('show-element');
+          obs.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+    animatedElements.forEach(el => observer.observe(el));
+    
+    /* Efekt cząsteczek */
+    const canvas = document.getElementById('particle-canvas');
+    const ctx = canvas.getContext('2d');
+    let particlesArray = [];
+    const numberOfParticles = 150;
+    
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', () => {
+      resizeCanvas();
+      initParticles();
+    });
+    resizeCanvas();
+    
+    class Particle {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 2 + 1;
+        this.speedX = Math.random() * 1 - 0.5;
+        this.speedY = Math.random() * 1 - 0.5;
+      }
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        if (this.x < 0 || this.x > canvas.width) this.speedX = -this.speedX;
+        if (this.y < 0 || this.y > canvas.height) this.speedY = -this.speedY;
+      }
+      draw() {
+        ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--primary');
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+    
+    function initParticles() {
+      particlesArray = [];
+      for (let i = 0; i < numberOfParticles; i++) {
+        particlesArray.push(new Particle());
+      }
+    }
+    
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particlesArray.forEach(particle => {
+        particle.update();
+        particle.draw();
+      });
+      requestAnimationFrame(animateParticles);
+    }
+    
+    initParticles();
+    animateParticles();
+    
+    /* Przycisk Back to Top oraz pasek postępu przewijania */
+    const backToTopButton = document.getElementById('back-to-top');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 300) {
+        backToTopButton.style.display = 'block';
+      } else {
+        backToTopButton.style.display = 'none';
+      }
+      const scrollTop = document.documentElement.scrollTop;
+      const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const progress = (scrollTop / scrollHeight) * 100;
+      document.getElementById('progress-bar').style.width = progress + '%';
+    });
+    
+    backToTopButton.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+    
+    /* Funkcja płynnego przewijania do sekcji */
+    function scrollToSection(sectionId) {
+      document.getElementById(sectionId).scrollIntoView({ behavior: 'smooth' });
+    }
+    
+    /* Efekt wpisywania tekstu */
+    const typedText = document.getElementById('typed');
+    const phrases = [
+      "Transforming data into mesmerizing visualizations...",
+      "Analyzing with precision and passion...",
+      "Creating digital experiences that inspire..."
+    ];
+    let currentPhrase = 0;
+    let currentLetter = 0;
+    let isDeleting = false;
+    
+    function typeEffect() {
+      let currentPhraseText = phrases[currentPhrase];
+      if (!isDeleting && currentLetter <= currentPhraseText.length) {
+        typedText.innerHTML = currentPhraseText.substring(0, currentLetter);
+        currentLetter++;
+        setTimeout(typeEffect, 100);
+      } else if (isDeleting && currentLetter > 0) {
+        typedText.innerHTML = currentPhraseText.substring(0, currentLetter);
+        currentLetter--;
+        setTimeout(typeEffect, 50);
+      } else {
+        isDeleting = !isDeleting;
+        if (!isDeleting) {
+          currentPhrase = (currentPhrase + 1) % phrases.length;
+        }
+        setTimeout(typeEffect, 1000);
+      }
+    }
+    typeEffect();
+    
+    /* Odtwarzanie dźwięku przy najechaniu na kartę projektu */
+    const hoverSound = document.getElementById('hoverSound');
+    document.querySelectorAll('.project-card').forEach(card => {
+      card.addEventListener('mouseenter', () => {
+        hoverSound.currentTime = 0;
+        hoverSound.play();
+      });
+    });
+    
+    /* System oceniania projektów z ulepszonym efektem fajerwerki */
+    document.querySelectorAll('.rating').forEach(ratingContainer => {
+      const stars = ratingContainer.querySelectorAll('i');
+      
+      stars.forEach(star => {
+        star.addEventListener('click', () => {
+          const rating = parseInt(star.getAttribute('data-value'));
+          stars.forEach(s => {
+            if (parseInt(s.getAttribute('data-value')) <= rating) {
+              s.classList.add('selected');
+            } else {
+              s.classList.remove('selected');
+            }
+          });
+          // Jeśli użytkownik przyznał maksymalną ocenę (5 gwiazdek), uruchom efekt fajerwerki
+          if (rating === 5) {
+            launchFirework();
+          }
+        });
+        
+        star.addEventListener('mouseover', () => {
+          const rating = parseInt(star.getAttribute('data-value'));
+          stars.forEach(s => {
+            if (parseInt(s.getAttribute('data-value')) <= rating) {
+              s.classList.add('hover');
+            } else {
+              s.classList.remove('hover');
+            }
+          });
+        });
+        
+        star.addEventListener('mouseout', () => {
+          stars.forEach(s => {
+            s.classList.remove('hover');
+          });
+        });
+      });
+    });
+    
+    /* Ulepszony efekt fajerwerki – większa, efektowniejsza eksplozja z dźwiękiem */
+    function launchFirework() {
+      // Odtwórz dźwięk fajerwerku
+      const fireworkSound = document.getElementById('fireworkSound');
+      fireworkSound.volume = 0.3; // Głośność od 0.0 (cicho) do 1.0 (pełna głośność)
+      fireworkSound.currentTime = 0;
+      fireworkSound.play();
+      
+      // Utwórz overlay canvas dla fajerwerków
+      const fwCanvas = document.createElement('canvas');
+      fwCanvas.id = 'firework-canvas-overlay';
+      fwCanvas.style.position = 'fixed';
+      fwCanvas.style.top = '0';
+      fwCanvas.style.left = '0';
+      fwCanvas.style.width = '100%';
+      fwCanvas.style.height = '100%';
+      fwCanvas.style.pointerEvents = 'none';
+      fwCanvas.style.zIndex = '4000';
+      document.body.appendChild(fwCanvas);
+      
+      const fwCtx = fwCanvas.getContext('2d');
+      fwCanvas.width = window.innerWidth;
+      fwCanvas.height = window.innerHeight;
+      
+      // Ustawienia animacji fajerwerki
+      const startX = fwCanvas.width / 2;
+      const startY = fwCanvas.height;
+      const endX = fwCanvas.width / 2;
+      const endY = fwCanvas.height / 2;
+      
+      const flightDuration = 800; // czas lotu
+      const explosionDuration = 1500; // czas eksplozji (wydłużony)
+      const totalDuration = flightDuration + explosionDuration;
+      let startTime = null;
+      let exploded = false;
+      let particles = [];
+      
+      function animateFirework(timestamp) {
+        if (!startTime) startTime = timestamp;
+        const elapsed = timestamp - startTime;
+        fwCtx.clearRect(0, 0, fwCanvas.width, fwCanvas.height);
+        
+        if (elapsed < flightDuration) {
+          // Faza lotu – większy pocisk i grubszy ślad
+          const progress = elapsed / flightDuration;
+          const currentX = startX + (endX - startX) * progress;
+          const currentY = startY + (endY - startY) * progress;
+          
+          fwCtx.strokeStyle = 'white';
+          fwCtx.lineWidth = 3;
+          fwCtx.beginPath();
+          fwCtx.moveTo(startX, startY);
+          fwCtx.lineTo(currentX, currentY);
+          fwCtx.stroke();
+          
+          fwCtx.fillStyle = 'white';
+          fwCtx.beginPath();
+          fwCtx.arc(currentX, currentY, 6, 0, Math.PI * 2);
+          fwCtx.fill();
+        } else {
+          if (!exploded) {
+            exploded = true;
+            // Generuj więcej cząsteczek
+            const particleCount = 150;
+            for (let i = 0; i < particleCount; i++) {
+              const angle = Math.random() * 2 * Math.PI;
+              const speed = Math.random() * 5 + 3;
+              particles.push({
+                x: endX,
+                y: endY,
+                vx: Math.cos(angle) * speed,
+                vy: Math.sin(angle) * speed,
+                alpha: 1,
+                size: Math.random() * 2 + 2,
+                color: `hsl(${Math.floor(Math.random() * 360)}, 100%, 50%)`
+              });
+            }
+          }
+          // Faza eksplozji – zastosuj tryb kompozycji 'lighter' dla efektu blasku
+          fwCtx.globalCompositeOperation = 'lighter';
+          particles.forEach(particle => {
+            particle.x += particle.vx;
+            particle.y += particle.vy;
+            particle.vx *= 0.98;
+            particle.vy *= 0.98;
+            particle.alpha -= 0.015;
+          });
+          particles.forEach(particle => {
+            fwCtx.save();
+            fwCtx.globalAlpha = Math.max(particle.alpha, 0);
+            fwCtx.fillStyle = particle.color;
+            fwCtx.beginPath();
+            fwCtx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+            fwCtx.fill();
+            fwCtx.restore();
+          });
+          fwCtx.globalCompositeOperation = 'source-over';
+        }
+        
+        if (elapsed < totalDuration) {
+          requestAnimationFrame(animateFirework);
+        } else {
+          document.body.removeChild(fwCanvas);
+        }
+      }
+      
+      requestAnimationFrame(animateFirework);
+    }
+  </script>
+</body>
+</html>
